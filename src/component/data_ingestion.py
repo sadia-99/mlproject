@@ -11,6 +11,10 @@ from src.exception import CustomException
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
+from src.component.data_transformation import DataTransformation
+from src.component.data_transformation import DataTransformationConfig
+from src.component.model_trainer import ModelTrainerConfig
+from src.component.model_trainer import ModelTrainer
 
 #1 LIRE LES DONNEES
 #Input: creer une classe qui permet de stocker les chemins
@@ -30,8 +34,9 @@ class DataIngestion:
         #Simple method 
         logging.info("Entered the data ingestion method or component")
         try: 
-            df = pd.read_csv('notebook\data\stud.csv')
+            df = pd.read_csv('notebook/data/stud.csv')
             logging.info('Read dataset as dataframe')
+
 
             #creer le dossier pour stocker les fichiers
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
@@ -60,5 +65,14 @@ class DataIngestion:
     
 # executer le code uniquement si ce fichier sera lancé, pas de import dans d'autre fichier 
 if __name__ =="__main__":
+    #Combine Data Ingestion
     obj=DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data, test_data, raw_data= obj.initiate_data_ingestion()
+
+    #Combine Data Transformation
+    data_transformation= DataTransformation()
+    train_arr, test_arr,_= data_transformation.initiate_data_transformation(train_data, test_data)
+
+    modeltrainer = ModelTrainer()
+    print(modeltrainer.initiate_model_trainer(train_arr, test_arr))
+
