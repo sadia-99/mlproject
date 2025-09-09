@@ -15,7 +15,7 @@ from src.utils import save_object
 #But : stocker les chemins/configs de cette étape.
 @dataclass
 class DataTransformationConfig:
-    preprocessor_obj_file_path = os.path.join('artifacts', "processor.pkl")
+    preprocessor_obj_file_path: str = os.path.join('artifacts', "processor.pkl")
 
 class DataTransformation:
     #But : instancier la config pour pouvoir accéder au chemin de sortie 
@@ -45,7 +45,7 @@ class DataTransformation:
                 steps=[
                     ("Imputer", SimpleImputer(strategy="most_frequent")),
                     ("one_hot_encoder", OneHotEncoder()),
-                    (("scaler", StandardScaler(with_mean=False)) )
+                    ("scaler", StandardScaler(with_mean=False))
 
                 ]
             )
